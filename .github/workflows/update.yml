@@ -1,0 +1,40 @@
+name: update-macro-events
+
+on:
+  schedule:
+    # UTC 02:30 = 北京时间 10:30
+    # 覆盖：当日上午中国数据（约 09:30 发布）、前晚 20:30 美国 CPI/PPI、隔夜 FOMC 决议
+    - cron: "30 2 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-macro-events
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch macro data
+        run: python fetch.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "macro-bot"
+          git config user.email "macro-bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes, skip commit"
+          else
+            git commit -m "auto: update macro events ($(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M'))"
+            git push
+          fi

@@ -1,0 +1,50 @@
+{
+ "updated_at": "2026-10-15 14:22",
+ "items": {
+  "cn_cpi": {
+   "title": "中国 9月 CPI 同比上涨0.9%",
+   "detail": "环比 +0.2%，前值同比 0.8%",
+   "value": 0.9,
+   "date": "2026-09-01",
+   "source": "https://data.eastmoney.com/cjsj/cpi.html"
+  },
+  "cn_ppi": {
+   "title": "中国 9月 PPI 同比上涨5.0%",
+   "detail": "前值同比 3.8%",
+   "value": 5,
+   "date": "2026-09-01",
+   "source": "https://data.eastmoney.com/cjsj/ppi.html"
+  },
+  "lpr": {
+   "title": "LPR 报价：1年期 3.0%、5年期 3.5%",
+   "detail": "",
+   "value": [
+    3,
+    3.5
+   ],
+   "date": "2026-09-20",
+   "source": "https://data.eastmoney.com/cjsj/globalRateLPR.html"
+  },
+  "us_cpi": {
+   "title": "美国 2026年9月 CPI 同比上涨3.7%",
+   "detail": "前值 3.4%",
+   "value": 3.7,
+   "date": "2026-10-14",
+   "source": "https://data.eastmoney.com/cjsj/foreign_0_12.html"
+  },
+  "us_ppi": {
+   "title": "美国 2026年8月 PPI 环比上涨0.4%",
+   "detail": "前值 0.1%",
+   "value": 0.4,
+   "date": "2026-09-10",
+   "source": "https://data.eastmoney.com/cjsj/foreign_0_6.html"
+  },
+  "fed": {
+   "title": "美联储加息 25 个基点，联邦基金利率目标上限至 4.00%",
+   "detail": "前值 3.75%",
+   "value": 4,
+   "date": "2026-09-17",
+   "source": "https://data.eastmoney.com/cjsj/globalRateUSA.html"
+  }
+ }
+}

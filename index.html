@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>中美宏观雷达</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --card: #ffffff; --text: #1a1d21; --muted: #8a919c;
+    --line: #e8eaee; --cn: #d54941; --us: #3568c4; --tag-bg: #f0f2f5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; }
+  header { padding: 8px 4px 16px; }
+  h1 { font-size: 22px; font-weight: 700; letter-spacing: .5px; }
+  .sub { color: var(--muted); font-size: 12px; margin-top: 6px; display: flex; justify-content: space-between; align-items: center; }
+  .snapshot { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+  .snap-card { background: var(--card); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--line); }
+  .snap-label { font-size: 11px; color: var(--muted); }
+  .snap-value { font-size: 17px; font-weight: 700; margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .snap-date { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .event { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; position: relative; overflow: hidden; }
+  .event::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .event.cn::before { background: var(--cn); }
+  .event.us::before { background: var(--us); }
+  .e-meta { display: flex; gap: 6px; align-items: center; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .tag { padding: 2px 8px; border-radius: 20px; background: var(--tag-bg); font-size: 11px; color: var(--text); }
+  .tag.country-cn { color: #fff; background: var(--cn); }
+  .tag.country-us { color: #fff; background: var(--us); }
+  .e-date { margin-left: auto; }
+  .e-title { font-size: 15px; font-weight: 600; line-height: 1.45; }
+  .e-detail { font-size: 12.5px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
+  .e-source { font-size: 11px; color: #7a9bd4; text-decoration: none; display: inline-block; margin-top: 6px; }
+  .empty { text-align: center; color: var(--muted); padding: 48px 0; font-size: 14px; }
+  .err { text-align: center; color: var(--muted); padding: 40px 0; font-size: 13px; line-height: 1.8; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>中美宏观雷达</h1>
+    <div class="sub">
+      <span>数据发布事件流 · 每日 10:30 云端更新</span>
+      <span id="updated"></span>
+    </div>
+  </header>
+  <div class="snapshot" id="snapshot"></div>
+  <div id="events"><div class="empty">加载中…</div></div>
+</div>
+<script>
+const CN_CPI = "中国CPI", CN_PPI = "中国PPI", LPR = "LPR", US_CPI = "美国CPI", US_PPI = "美国PPI", FED = "美联储";
+const SNAP_LABELS = { cn_cpi: CN_CPI, cn_ppi: CN_PPI, lpr: LPR, us_cpi: US_CPI, us_ppi: US_PPI, fed: FED };
+
+function fmtVal(v) {
+  if (Array.isArray(v)) return v.map(x => Number(x).toFixed(1)).join(" / ");
+  if (typeof v === "number") return v.toFixed(1) + "%";
+  return "—";
+}
+
+async function load() {
+  try {
+    const [evRes, ltRes] = await Promise.all([
+      fetch("data/events.json?t=" + Date.now()),
+      fetch("data/latest.json?t=" + Date.now()).catch(() => null),
+    ]);
+    const events = await evRes.json();
+
+    if (ltRes && ltRes.ok) {
+      const latest = (await ltRes.json()).items || {};
+      document.getElementById("updated").textContent =
+        "更新于 " + (ltRes.updated_at || "");
+      document.getElementById("snapshot").innerHTML = Object.keys(SNAP_LABELS)
+        .filter(k => latest[k])
+        .map(k => {
+          const it = latest[k];
+          return '<div class="snap-card"><div class="snap-label">' + SNAP_LABELS[k] +
+            '</div><div class="snap-value">' + fmtVal(it.value) +
+            '</div><div class="snap-date">' + (it.date || "") + "</div></div>";
+        }).join("");
+    }
+
+    const box = document.getElementById("events");
+    if (!Array.isArray(events) || events.length === 0) {
+      box.innerHTML = '<div class="empty">暂无事件，等下一次云端更新。</div>';
+      return;
+    }
+    box.innerHTML = events.map(e => {
+      const cls = e.country === "中国" ? "cn" : "us";
+      const ctag = e.country === "中国" ? "country-cn" : "country-us";
+      return '<div class="event ' + cls + '">' +
+        '<div class="e-meta"><span class="tag ' + ctag + '">' + e.country + "</span>" +
+        '<span class="tag">' + e.category + "</span>" +
+        '<span class="e-date">' + e.date + "</span></div>" +
+        '<div class="e-title">' + e.title + "</div>" +
+        (e.detail ? '<div class="e-detail">' + e.detail + "</div>" : "") +
+        (e.source ? '<a class="e-source" href="' + e.source + '" target="_blank" rel="noopener">数据来源 ↗</a>' : "") +
+        "</div>";
+    }).join("");
+  } catch (err) {
+    document.getElementById("events").innerHTML =
+      '<div class="err">数据加载失败，稍后重试。<br>' + err + "</div>";
+  }
+}
+load();
+</script>
+</body>
+</html>

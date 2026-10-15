@@ -1,0 +1,47 @@
+[
+ {
+  "id": "us_cpi:2026-09-01",
+  "date": "2026-10-14",
+  "country": "美国",
+  "category": "通胀",
+  "title": "美国 2026年9月 CPI 同比上涨3.7%",
+  "detail": "前值 3.4%",
+  "source": "https://data.eastmoney.com/cjsj/foreign_0_12.html"
+ },
+ {
+  "id": "fed:2026-09-01",
+  "date": "2026-09-17",
+  "country": "美国",
+  "category": "货币政策",
+  "title": "美联储加息 25 个基点，联邦基金利率目标上限至 4.00%",
+  "detail": "前值 3.75%",
+  "source": "https://data.eastmoney.com/cjsj/globalRateUSA.html"
+ },
+ {
+  "id": "us_ppi:2026-08-01",
+  "date": "2026-09-10",
+  "country": "美国",
+  "category": "通胀",
+  "title": "美国 2026年8月 PPI 环比上涨0.4%",
+  "detail": "前值 0.1%",
+  "source": "https://data.eastmoney.com/cjsj/foreign_0_6.html"
+ },
+ {
+  "id": "cn_cpi:2026-09-01",
+  "date": "2026-09-01",
+  "country": "中国",
+  "category": "通胀",
+  "title": "中国 9月 CPI 同比上涨0.9%",
+  "detail": "环比 +0.2%，前值同比 0.8%",
+  "source": "https://data.eastmoney.com/cjsj/cpi.html"
+ },
+ {
+  "id": "cn_ppi:2026-09-01",
+  "date": "2026-09-01",
+  "country": "中国",
+  "category": "通胀",
+  "title": "中国 9月 PPI 同比上涨5.0%",
+  "detail": "前值同比 3.8%",
+  "source": "https://data.eastmoney.com/cjsj/ppi.html"
+ }
+]
