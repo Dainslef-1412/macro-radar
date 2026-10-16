@@ -1,5 +1,14 @@
 [
  {
+  "id": "us_ppi:2026-09-01",
+  "date": "2026-10-15",
+  "country": "美国",
+  "category": "通胀",
+  "title": "美国 2026年9月 PPI 环比上涨1.3%",
+  "detail": "前值 0.5%",
+  "source": "https://data.eastmoney.com/cjsj/foreign_0_6.html"
+ },
+ {
   "id": "us_cpi:2026-09-01",
   "date": "2026-10-14",
   "country": "美国",
